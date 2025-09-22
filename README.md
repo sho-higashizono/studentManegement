@@ -1,1 +1,2 @@
-# studentManegement
+Javaスタンダード課題
+生徒管理システム
