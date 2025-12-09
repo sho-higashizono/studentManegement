@@ -19,7 +19,6 @@ import java.util.stream.Collectors;
 public class StudentController {
 
 
-
     private StudentService service;
     private StudentConverter converter;
 
@@ -35,18 +34,18 @@ public class StudentController {
 
     //全件取得
     @GetMapping("/studentList")
-    public String getStudentList(Model model){
+    public String getStudentList(Model model) {
         List<Student> students = service.searchStudentList();
         List<StudentCourse> studentCourses = service.searchStudentCourse();
 
-        model.addAttribute("studentList",converter.convertStudentDetails(students,studentCourses));
+        model.addAttribute("studentList",
+                converter.convertStudentDetails(students, studentCourses));
         return "studentList";
     }
 
 
-
     @GetMapping("/studentCourseList")
-    public List<StudentCourse> getStudentCourseList(){
+    public List<StudentCourse> getStudentCourseList() {
         return service.searchStudentCourse();
     }
 }
