@@ -31,7 +31,6 @@ public interface StudentRepository {
 
     @Insert("INSERT INTO students(name, kana_name, nick_name, email, area, age, sex, remark, is_deleted) " +
             "VALUES(#{name}, #{kanaName}, #{nickName}, #{email}, #{area}, #{age}, #{sex}, #{remark}, false)")
-
     @Options(useGeneratedKeys = true, keyProperty = "studentId")
     void registerStudent(Student student);
 

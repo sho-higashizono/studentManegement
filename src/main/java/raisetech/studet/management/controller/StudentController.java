@@ -55,9 +55,6 @@ public class StudentController {
         StudentDetail studentDetail = new StudentDetail();
         studentDetail.setStudentsCourses(Arrays.asList(new StudentsCourses()));
         model.addAttribute("studentDetail", studentDetail);
-
-
-
         return "registerStudent";
     }
 
