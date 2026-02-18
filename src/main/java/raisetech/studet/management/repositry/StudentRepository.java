@@ -15,19 +15,18 @@ import java.util.List;
 @Mapper
 public interface StudentRepository {
 
-    /**
-     * 全件検索します。
-     * @return 全件検索した受講生情報の一覧
-     */
     @Select("SELECT * FROM students")
-    List<Student> searchStudent();
+    List<Student> search();
 
-    /**
-     * 全件検索します。
-     * @return 全件検索した受講生コース情報の一覧
-     */
+    @Select("SELECT * FROM students WHERE student_id = #{studentId}")
+    Student searchStudent(String studentId);
+
+
     @Select("SELECT * FROM students_courses")
-    List<StudentsCourses> searchStudentCourse();
+    List<StudentsCourses> searchStudentCourseList();
+
+    @Select("SELECT * FROM students_courses WHERE student_id = #{studentId}")
+    List<StudentsCourses> searchStudentCourse(String studentId);
 
     @Insert("INSERT INTO students(name, kana_name, nick_name, email, area, age, sex, remark, is_deleted) " +
             "VALUES(#{name}, #{kanaName}, #{nickName}, #{email}, #{area}, #{age}, #{sex}, #{remark}, false)")
@@ -38,4 +37,12 @@ public interface StudentRepository {
             + "VALUES(#{studentId}, #{courseName}, #{courseStartAt}, #{courseEndAt})")
     @Options(useGeneratedKeys = true, keyProperty = "id")
     void registerStudentCourse(StudentsCourses studentCourse);
+
+    @Update("UPDATE students SET name = #{name}, kana_name = #{kanaName}, nick_name = #{nickName}, " +
+            "email = #{email}, area = #{area}, age = #{age}, sex = #{sex},  remark = #{remark}, " +
+            "is_deleted = #{isDeleted} WHERE student_id = #{studentId}")
+    void updateStudent(Student student);
+
+    @Update("UPDATE students_courses SET course_name = #{courseName} WHERE id = #{id}")
+    void updateStudentCourse(StudentsCourses studentCourses);
 }

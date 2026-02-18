@@ -17,29 +17,44 @@ public class StudentService {
     private StudentRepository repository;
 
     @Autowired
-    public StudentService(StudentRepository repository){
+    public StudentService(StudentRepository repository) {
         this.repository = repository;
     }
 
-    public List<Student> searchStudentList(){
-       return repository.searchStudent();
+    public List<Student> searchStudentList() {
+        return repository.search();
     }
 
-    public List<StudentsCourses> searchStudentCourse(){
-       return repository.searchStudentCourse();
+    public StudentDetail searchStudent(String studentId){
+        Student student = repository.searchStudent(studentId);
+        List<StudentsCourses> studentsCourses = repository.searchStudentCourse(student.getStudentId());
+        StudentDetail studentDetail = new StudentDetail();
+        studentDetail.setStudent(student);
+        studentDetail.setStudentsCourses(studentsCourses);
+        return studentDetail;
+    }
+
+    public List<StudentsCourses> searchStudentCourseList() {
+        return repository.searchStudentCourseList();
     }
 
     @Transactional
-    public void registerStudent(StudentDetail studentDetail){
-
+    public void registerStudent(StudentDetail studentDetail) {
         repository.registerStudent(studentDetail.getStudent());
-        //TODO:コース情報登録も行う。
-        for (StudentsCourses studentsCourses : studentDetail.getStudentsCourses()){
+        for (StudentsCourses studentsCourses : studentDetail.getStudentsCourses()) {
             studentsCourses.setStudentId(studentDetail.getStudent().getStudentId());
             studentsCourses.setCourseStartAt(LocalDateTime.now());
             studentsCourses.setCourseEndAt(LocalDateTime.now().plusYears(1));
             repository.registerStudentCourse(studentsCourses);
         }
+    }
 
+    @Transactional
+    public void updateStudent(StudentDetail studentDetail) {
+        repository.updateStudent(studentDetail.getStudent());
+        for (StudentsCourses studentsCourses : studentDetail.getStudentsCourses()) {
+            studentsCourses.setStudentId(studentDetail.getStudent().getStudentId());
+            repository.updateStudentCourse(studentsCourses);
+        }
     }
 }
