@@ -15,7 +15,8 @@ import java.util.List;
 @Mapper
 public interface StudentRepository {
 
-    @Select("SELECT * FROM students")
+    //WHERE is_deleted = falseを削除するとキャンセル人物は画面に表示される
+    @Select("SELECT * FROM students WHERE is_deleted = false")
     List<Student> search();
 
     @Select("SELECT * FROM students WHERE student_id = #{studentId}")
